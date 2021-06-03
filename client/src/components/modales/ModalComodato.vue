@@ -40,11 +40,10 @@ export default {
                 try {
                     const response = await uploadComodato(formData);
                     const result = await response.json();
-
                     this.$store.dispatch('hideLoading');
                     if(response.status === 200) {
                         this.$store.dispatch('showSuccess', result.message);
-                        const nombreComodato = `${formData.get('qr')}_${formData.get('dni_estudiante')}.pdf`;
+                        const nombreComodato = `${formData.get('qr')}_${formData.get('dni_estudiante')}_${formData.get('id_prestamo')}.pdf`;
                         this.$store.dispatch('updateComodatoPrestamo', { 
                             id_prestamo: formData.get('id_prestamo'), 
                             comodato: nombreComodato

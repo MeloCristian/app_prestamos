@@ -16,7 +16,10 @@ router.get('/:qr', prestamosController.getPrestamos);
 // Realizar un prestamo
 router.post('/', upload.single('archivo_pdf'), async (req, res) => {        
     
-    const prestamo = await prestamosController.createPrestamo(req.body);
+    // const prestamo = await prestamosController.createPrestamo(req.body);
+    const comodato = await prestamosController.setComodatoPrestamo( req.body );
+    const prestamo = await prestamosController.getPrestamo(req.body.id_prestamo);
+    
     if(!prestamo.error) {
         res.json(prestamo);
     } else {

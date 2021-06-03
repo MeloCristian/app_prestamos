@@ -1,6 +1,8 @@
 const multer = require('multer');
 
 const registroController = require('../controllers/registros.controller');
+const prestamoController = require('../controllers/prestamos.controller');
+
 
 const setStorageMulter = (destino, accion) => {
     return multer.diskStorage({
@@ -12,7 +14,21 @@ const setStorageMulter = (destino, accion) => {
             const { id_prestamo, qr, dni_estudiante } = req.body;
             
             let fileName = '';
-            if(accion == 'prestamo') fileName = `${qr}_${dni_estudiante}.pdf`;
+            if(accion == 'prestamo') {
+                if(!req.body.id_prestamo) {
+                    // Para el caso de las revisiones, lo que debo hacer es hacer la creación de la revisión sin el campo pdf_soporte
+                    // Después tomar el id_registro de ese registro insertado y...
+                    // Ponerlo en el nombre del archivo para evitar que los soportes anteriores se pierdan
+                    // Finalmente ese id_registro lo pongo en el req.body para poder actualizar el campo pdf_soporte...
+                    // Revisar el archivo revisiones.routes.js en el metodo post para continuar y entender lo que se hace
+                    const prestamo = await prestamoController.createPrestamo( req.body );
+                    req.body.id_prestamo = prestamo['id_prestamo'];
+                    fileName = `${qr}_${dni_estudiante}_${prestamo['id_prestamo']}.pdf`;
+                } else {
+                    // Si existe el parametro id_prestamo, entonces simplemente agrego el archivo con el nombre correspondiente
+                    fileName = `${qr}_${dni_estudiante}_${id_prestamo}.pdf`;
+                }
+            }
             if(accion == 'devolucion') fileName = `devolucion_${id_prestamo}_${qr}.pdf`;
             if(accion == 'revision') {
                 // Si no existe el parametro id_registro, quiere decir que va a iniciar un registro entonces hago lo siguiente:
