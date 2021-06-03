@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body">
             <p class="text-center">Seleccione el comotado correspondiente al préstamo.</p>
-            <p class="text-center">El comodato sera renombrado asi: <strong>QR_dniestudiante.pdf</strong></p>
+            <p class="text-center">Recuerde ser cuidadoso al momento de cargar el comodato, y posteriormente revisar si fue cargado correctamente.</p>
             <form>
                 <div class="form-group">
                     <label>Comodato: <span id="error-archivo" class="text-danger"></span></label>

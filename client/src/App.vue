@@ -169,6 +169,9 @@ select {
 .text-danger {
     color: #ff3636cc;
 }
+.text-success {
+    color: #18ce0f;
+}
 .form-control {
     display: block;
     width: 100%;

@@ -59,7 +59,7 @@
                                 aria-label="Nueva revisión"
                                 @click="modalGarantia(prestamo)">
                             <img src="@/assets/img/revision.svg" width="30" height="30"/>
-                            <span>Garantía</span>
+                            <span>Revisión</span>
                         </button>
                         <button v-if="!prestamo.fecha_fin && estadoActualPC != 4" 
                                 class="btn btn-info hint--top" 

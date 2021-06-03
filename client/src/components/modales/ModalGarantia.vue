@@ -13,6 +13,8 @@
         </div>
         <div class="modal-body">
             <p v-if="datosModal.fin_proceso" class="text-center">Para finalizar la revisión, seleccione fecha de finalización y el archivo de soporte en PDF</p>
+            <p v-else class="text-center">Para iniciar la revisión, seleccione fecha de inicio y el archivo de soporte en PDF</p>
+
             <form>
                 <div class="form-group">
                     <label v-if="!datosModal.fin_proceso">Fecha inicio:</label>

@@ -17,8 +17,8 @@
                     <input type="text" v-model="qr" class="form-control" placeholder="QR - Equipo">
                 </div>
                 <div class="form-group">
-                    <label>DNI Estudiante:</label>
-                    <input type="text" v-model="dni_estudiante" class="form-control" placeholder="DNI estudiante" />
+                    <label>DNI Estudiante: <span id="message-dni"> {{ message_dni }} </span></label>
+                    <input type="text" v-model="dni_estudiante" @keyup="validarDni" class="form-control" placeholder="DNI estudiante" />
                 </div>
                 <div class="form-group">
                     <input list="funcionarios" v-model="dni_funcionario" class="form-control" placeholder="DNI funcionario">
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { getAutocompletado } from '../../services/app.service';
+import { getAutocompletado, getComodatario } from '../../services/app.service';
 import { createPrestamo } from '../../services/prestamos.service';
 import modalFileMixin from '@/mixins/modalFileMixin';
 
@@ -65,7 +65,9 @@ export default {
             dni_estudiante: null,
             dni_funcionario: null,
             fecha_inicio: null,
-            lugar_prestamo: ''
+            lugar_prestamo: '',
+            message_dni: null,
+            success_dni: false 
         }
     },
     computed: {
@@ -93,6 +95,38 @@ export default {
                 }
             } catch(error) {
                 console.error(error);
+            }
+        },
+        async validarDni(e) {
+            const dni = e.target.value
+            const span = document.querySelector('#message-dni');
+            if(dni.length > 6) {
+                try {
+                    const response = await getComodatario(dni);
+                    const result = await response.json();
+                    if(response.status === 200) {
+                        e.target.classList.remove('danger');
+                        span.classList.remove('text-danger');
+                        span.classList.add('text-success');
+                        this.message_dni = result.nombre;
+                        this.success_dni = true;
+                    } else {
+                        e.target.classList.add('danger');
+                        span.classList.remove('text-success');
+                        span.classList.add('text-danger');
+                        this.message_dni = result.error;
+                        this.success_dni = false;
+                    }
+                } catch(error) {
+                    console.error(error);
+                    e.target.classList.add('danger');
+                    this.message_dni = 'Estudiante no registrado en la base de datos';
+                    this.success_dni = false;
+                }
+            } else {
+                e.target.classList.remove('danger');
+                this.message_dni = null;
+                this.success_dni = false;
             }
         },
         async realizarPrestamo() {

@@ -82,7 +82,7 @@ class PrestamosController {
             const comodato = `${qr}_${dni_estudiante}.pdf`;
 
             const result = await pool.query(`
-                UPDATE prestmos
+                UPDATE prestamos
                 SET comodato = $1
                 WHERE id_prestamo = $2 AND qr = $3;
             `, [ comodato, id_prestamo, qr]);

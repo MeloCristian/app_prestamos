@@ -8,7 +8,8 @@
                 <img src="@/assets/img/prestamo.svg" width="30" height="30"/>
                 <span>Préstamo</span>
             </button>
-            <button class="btn btn-primary hint--bottom"
+            <button v-if="!summary"
+                    class="btn btn-primary hint--bottom animate__animated animate__fadeIn animate__faster"
                         aria-label="Mostrar resumen"
                         @click="showSummary">
                 <img src="@/assets/img/summary.svg" width="30" height="30"/>

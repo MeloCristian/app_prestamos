@@ -34,6 +34,16 @@ router.get('/info', async (req, res) => {
     });
 });
 
+router.get('/comodatario/:dni', async (req, res) => {
+    const { dni } = req.params;
+    const comodatario = await infoController.getComodatario(dni);
+    if(!comodatario.error) {
+        res.json(comodatario);
+    } else {
+        res.status(400).json(comodatario);
+    }
+});
+
 router.get('/:qr', async (req, res) => {
     // Obtengo la información del equipo
     // Obtengo los prestamos que tiene el equipo
