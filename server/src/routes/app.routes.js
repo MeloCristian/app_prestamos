@@ -31,7 +31,7 @@ router.get('/summary', async (req, res) => {
     });
 });
 
-router.get('/info', verifyToken, async (req, res) => {
+router.get('/info', async (req, res) => {
     const sedes = await infoController.getSedes();
     const funcionarios = await infoController.getFuncionarios();
     res.json({
