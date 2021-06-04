@@ -6,6 +6,7 @@ const prestamosController = require('../controllers/prestamos.controller');
 
 // configuracion y creacion del upload multer
 const { createMulterUpload } = require('../helpers/multer');
+const { verifyToken } = require('../helpers/jwt');
 const upload = createMulterUpload('devolucion');
 
 router.get('/', (req, res) => {
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
 });
 
 // Realizar un registro de (Garantía - Revisión) o Devolución
-router.post('/', upload.single('archivo_pdf'), async (req, res) => {        
+router.post('/', verifyToken, upload.single('archivo_pdf'), async (req, res) => {        
 
     const devolucion = await registrosController.createDevolucion( req.body );
     if(!devolucion.error) {
@@ -24,7 +25,7 @@ router.post('/', upload.single('archivo_pdf'), async (req, res) => {
 
 });
 
-router.put('/', upload.single('archivo_pdf'), async (req, res) => {        
+router.put('/', verifyToken, upload.single('archivo_pdf'), async (req, res) => {        
 
     const devolucion = await registrosController.terminarRegistro( req.body );
     if(!devolucion.error) {

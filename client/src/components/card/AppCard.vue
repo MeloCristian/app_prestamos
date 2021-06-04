@@ -54,12 +54,18 @@ export default {
                         return curr.id_prestamo
                 }, 0);
 
+                const finalizado = prestamos.filter(p => p.id_prestamo == id_prestamo && p.fecha_fin);
+
+                if (finalizado.length) {
+                    return 1;
+                }
+
                 // Obtengo los registros
                 const registros = JSON.parse(JSON.stringify(this.allInfo.registros));
 
                 if(registros.length) {
                     // Si hay registros...
-                    // Compruengo si hay devoluciones para el ultimo prestamo realizado
+                    // Compruebo si hay devoluciones para el ultimo prestamo realizado
                     const devolucion = registros.filter(r => r.id_prestamo == id_prestamo && r.id_proceso == 2);
                     if(devolucion.length) {
                         // Si hay una devolucion compruebo que ya este terminada

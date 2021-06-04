@@ -36,8 +36,8 @@
                     <div class="row">
                         <h6>soporte</h6>
                         <p v-if="registro.pdf_soporte">
-                            <a v-if="registro.id_proceso == 1" :href="$api+'revisiones/'+registro.pdf_soporte" target="_blank"><img src="@/assets/img/pdf.svg" width="23" height="23"/> Ver formato</a>
-                            <a v-if="registro.id_proceso == 2" :href="$api+'devoluciones/'+registro.pdf_soporte" target="_blank"><img src="@/assets/img/pdf.svg" width="23" height="23"/> Ver formato</a>
+                            <a v-if="registro.id_proceso == 1" :href="$api+'soportes/revisiones/'+registro.pdf_soporte" target="_blank"><img src="@/assets/img/pdf.svg" width="23" height="23"/> Ver formato</a>
+                            <a v-if="registro.id_proceso == 2" :href="$api+'soportes/devoluciones/'+registro.pdf_soporte" target="_blank"><img src="@/assets/img/pdf.svg" width="23" height="23"/> Ver formato</a>
                             </p>
                         <p v-else><a><img src="@/assets/img/nocomodato.svg" width="23" height="23"/> Sin formato</a></p>
                     </div>

@@ -44,7 +44,7 @@
                         </div>
                         <div class="row">
                             <h6>comodato</h6>
-                            <p v-if="prestamo.comodato"><a :href="$api+'comodatos/'+prestamo.comodato" target="_blank"><img src="@/assets/img/pdf.svg" width="23" height="23"/> Ver comodato</a></p>
+                            <p v-if="prestamo.comodato"><a :href="$api+'soportes/comodatos/'+prestamo.comodato" target="_blank"><img src="@/assets/img/pdf.svg" width="23" height="23"/> Ver comodato</a></p>
                             <p v-else><a><img src="@/assets/img/nocomodato.svg" width="23" height="23"/> Sin comodato</a></p>
                         </div>
                     </div>

@@ -3,6 +3,7 @@ const router = Router();
 
 // Controller
 const prestamosController = require('../controllers/prestamos.controller');
+const { verifyToken } = require('../helpers/jwt');
 
 // configuracion y creacion del upload multer
 const { createMulterUpload } = require('../helpers/multer');
@@ -14,7 +15,7 @@ const upload = createMulterUpload('prestamo');
 router.get('/:qr', prestamosController.getPrestamos);
 
 // Realizar un prestamo
-router.post('/', upload.single('archivo_pdf'), async (req, res) => {        
+router.post('/', verifyToken, upload.single('archivo_pdf'), async (req, res) => {        
     
     // const prestamo = await prestamosController.createPrestamo(req.body);
     const comodato = await prestamosController.setComodatoPrestamo( req.body );
@@ -28,7 +29,7 @@ router.post('/', upload.single('archivo_pdf'), async (req, res) => {
 });
 
 // Cargar comodato
-router.put('/', upload.single('archivo_pdf'), async (req, res) => {        
+router.put('/', verifyToken, upload.single('archivo_pdf'), async (req, res) => {        
     
     try {
         const result = await prestamosController.setComodatoPrestamo(req.body);

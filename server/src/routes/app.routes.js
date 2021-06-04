@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const jwt = require('jsonwebtoken');
 const router = Router();
 
 // Controllers
@@ -7,6 +8,11 @@ const prestamosController = require('../controllers/prestamos.controller');
 const registrosController = require('../controllers/registros.controller');
 
 const infoController = require('../controllers/info.controller');
+const { verifyToken } = require('../helpers/jwt');
+
+router.get('/is_logged', verifyToken, async (req, res) => {
+    res.json({ logged: true });
+});
 
 router.get('/summary', async (req, res) => {
 
@@ -25,7 +31,7 @@ router.get('/summary', async (req, res) => {
     });
 });
 
-router.get('/info', async (req, res) => {
+router.get('/info', verifyToken, async (req, res) => {
     const sedes = await infoController.getSedes();
     const funcionarios = await infoController.getFuncionarios();
     res.json({
@@ -44,7 +50,7 @@ router.get('/comodatario/:dni', async (req, res) => {
     }
 });
 
-router.get('/:qr', async (req, res) => {
+router.get('/:qr', verifyToken, async (req, res) => {
     // Obtengo la información del equipo
     // Obtengo los prestamos que tiene el equipo
     // Obtengo los registros que se han hecho al equipo (Revisiones, garantias o devoluciones)
@@ -68,6 +74,22 @@ router.get('/:qr', async (req, res) => {
     });
 });
 
+router.post('/login', async (req, res) => {
+
+    try {
+        const { user, password } = req.body;
+        if(user.toLowerCase() == process.env.USER.toLowerCase() && password == process.env.PASSWORD) {
+            const token = jwt.sign({ user }, process.env.KEY_SECRET);
+            res.json( { token } );
+        } else {
+            res.status(400).json( { error: 'Datos erroneos. Inténtelo nuevamente' } );
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(400).json(error);
+    }
+
+});
 
 
 module.exports = router;

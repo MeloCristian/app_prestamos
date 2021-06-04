@@ -7,7 +7,18 @@ const routes = [
     {
         path: "/",
         name: "Home",
-        component: () => import(/* webpackChunkName: "home" */ "../views/Home.vue")
+        component: () => import(/* webpackChunkName: "home" */ "../views/Home.vue"),
+        meta: {
+            requiresToken: true
+        }
+    },
+    {
+        path: "/login",
+        name: "Login",
+        component: () => import(/* webpackChunkName: "login" */ "../views/Login.vue"),
+        meta: {
+            requiresToken: false
+        }
     },
     {
         path: '*',
@@ -21,6 +32,16 @@ const router = new VueRouter({
     mode: "history",
     base: process.env.BASE_URL,
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresToken && !localStorage.getItem("token")) {
+        next({ name: "Login" });
+    } else if(!to.meta.requiresToken && localStorage.getItem("token")) {
+        next({ name: "Home" });
+    } else {
+        next();
+    }
 });
 
 export default router;

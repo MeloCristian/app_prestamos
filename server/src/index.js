@@ -12,7 +12,7 @@ app.set('port', process.env.PORT || 3000);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // Rutas
 const appRoutes = require('./routes/app.routes');
@@ -30,7 +30,7 @@ app.use('/revisiones', revisionesRoutes);
 app.use('/devoluciones', devolucionesRoutes);
 
 // Ruta para los archivos
-app.use('/', archivosRoutes);
+app.use('/soportes', archivosRoutes);
 
 // Iniciar servidor
 app.listen(app.get('port'), () => {

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 const registrosController = require('../controllers/registros.controller');
+const { verifyToken } = require('../helpers/jwt');
 
 // configuracion y creacion del upload multer
 const { createMulterUpload } = require('../helpers/multer');
@@ -12,7 +13,7 @@ router.get('/', (req, res) => {
 });
 
 // Realizar un registro de (Garantía - Revisión) o Devolución
-router.post('/', upload.single('archivo_pdf'), async (req, res) => {        
+router.post('/', verifyToken, upload.single('archivo_pdf'), async (req, res) => {        
 
     // Cuando llegua aqui, quiere decir que el archivo y el registro ya se crearon en la base de datos...
     // Entonces lo que se hace ahora es proceder a setear el campo pdf_soporte para el registro correspondiente
@@ -27,7 +28,7 @@ router.post('/', upload.single('archivo_pdf'), async (req, res) => {
 
 });
 
-router.put('/', upload.single('archivo_pdf'), async (req, res) => {        
+router.put('/', verifyToken, upload.single('archivo_pdf'), async (req, res) => {        
 
     const revision = await registrosController.terminarRegistro( req.body );
     if(!revision.error) {

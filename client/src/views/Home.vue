@@ -24,23 +24,23 @@
                 <button type="submit" class="btn btn-primary btn-round" :disabled="!qr">Consultar</button>
             </div>
         </form>
+        <template v-if="logged">
+                <template v-if="!infoVacia && !summary">
+                    <AppCard />
+                </template>
+                <template v-if="infoVacia && allInfo.informacion">
+                    <div class="alerta alerta-error text-center animate__animated animate__fadeInUp animate__faster">No se encontro información relacionada a su consulta</div>
+                </template>
 
-        <template v-if="!infoVacia && !summary">
-            <AppCard />
+                <template v-if="summary">
+                    <AppSummary />
+                </template>
         </template>
-        <template v-if="infoVacia && allInfo.informacion">
-            <div class="alerta alerta-error text-center animate__animated animate__fadeInUp animate__faster">No se encontro información relacionada a su consulta</div>
-        </template>
-
-        <template v-if="summary">
-            <AppSummary />
-        </template>
-
     </div>
 </template>
 
 <script>
-import { getAll } from '../services/app.service';
+import { getAll, isLogged } from '../services/app.service';
 
 export default {
     name: "Home",
@@ -48,6 +48,7 @@ export default {
         return {
             qr: null,
             summary: true,
+            logged: false
         }
     },
     computed: {
@@ -64,6 +65,24 @@ export default {
                 }
             }
             return empty;
+        }
+    },
+    async beforeCreate() {
+        try {
+            const response = await isLogged();
+            const result = await response.json();
+            if(response.status === 200) {
+                this.logged = true;
+            } else {
+                localStorage.removeItem('token');
+                this.$router.push( { name: 'Login' } );
+                this.$store.dispatch('showError', result.error);
+            }
+        } catch(error) {
+            console.error(error);
+            localStorage.removeItem('token');
+            this.$router.push( { name: 'Login' } );
+            this.$store.dispatch('showError', 'Hay un error con la sesión actual. <br> Inicie sesión nuevamente');
         }
     },
     created() {
