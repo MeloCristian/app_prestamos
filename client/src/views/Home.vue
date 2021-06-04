@@ -15,6 +15,9 @@
                 <img src="@/assets/img/summary.svg" width="30" height="30"/>
                 <span>Información</span>
             </button>
+
+            <img class="btn-logout" @click="cerrarSesion" src="@/assets/img/logout.svg" width="45" height="45" />
+
         </div>
 
         <form @submit.prevent="consultarQR">
@@ -115,6 +118,10 @@ export default {
         },
         showModal(modal) {
             this.$store.dispatch('showModal', { show_modal: modal });
+        },
+        cerrarSesion() {
+            localStorage.removeItem('token');
+            this.$router.push( { name: 'Login' } )
         }
     },
     components: {
@@ -126,6 +133,9 @@ export default {
 
 <style scoped>
 .principal-buttons {
+    position: relative;
+    max-width: 750px;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -137,6 +147,18 @@ export default {
 }
 .principal-buttons button img {
     margin-right: 5px;
+}
+.principal-buttons .btn-logout {
+    display: block;
+    position: absolute;
+    right: 0;
+    opacity: .7;
+    cursor: pointer;
+    transition: .3s ease all;
+}
+.principal-buttons .btn-logout:hover {
+    opacity: 1;
+    transform: scale(1.1);
 }
 form h4 {
     margin-top: 10px;
