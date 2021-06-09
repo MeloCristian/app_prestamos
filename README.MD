@@ -74,8 +74,6 @@ NOTA 2: El servidor usa por defecto el puerto 3000, para confirgurar las variabl
 
 ## Construido con 🛠️
 
-_Menciona las herramientas que utilizaste para crear tu proyecto_
-
 * [Vue 2](https://vuejs.org/) - Framework web
 * [SweetAlert2](https://sweetalert2.github.io/) - Libreria de Alertas
 * [Flat icon](https://www.flaticon.com/) - Iconos gratiutos
