@@ -47,6 +47,10 @@
                             <p v-if="prestamo.comodato"><a :href="$api+'soportes/comodatos/'+prestamo.comodato" target="_blank"><img src="@/assets/img/pdf.svg" width="23" height="23"/> Ver comodato</a></p>
                             <p v-else><a><img src="@/assets/img/nocomodato.svg" width="23" height="23"/> Sin comodato</a></p>
                         </div>
+                        <div class="row foto">
+                            <p v-if="prestamo.evidencia"><a :href="$api+'soportes/evidencias/'+prestamo.evidencia" target="_blank"><img :src="$api+'soportes/evidencias/'+prestamo.evidencia" class="foto_evidencia" width="150" height="150"/></a></p>
+                            <p v-else><a><img src="@/assets/img/foto.svg" width="40" height="40"/> Sin evidencia</a></p>
+                        </div>
                     </div>
                     <div class="opts-box">
                         <button class="btn btn-primary hint--top" aria-label="Cargar comodato"
@@ -123,5 +127,22 @@ export default {
     margin: 15px auto;
     padding: 5px 10px;
     box-shadow: 0 5px 7px 3px rgb(0 0 0 / 20%);
+}
+</style>
+
+<style scoped>
+.row.foto {
+    border: none;
+    justify-content: center;
+    align-items: center;
+}
+.row.foto p img{
+    width: 35px;
+}
+.row.foto .foto_evidencia {
+    width: 250px;
+    /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .3); */
+    border: 1px solid #858585;
+    border-radius: 10px;
 }
 </style>

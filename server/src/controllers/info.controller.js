@@ -24,7 +24,6 @@ class InfoController {
     async getComodatario( dni ) {
         try {
             const comodatario = await pool.query('SELECT nombre FROM comodatarios WHERE cedula = $1 LIMIT 1', [ dni ]);
-            console.log(comodatario.rows);
             if(comodatario.rowCount > 0) {
                 return comodatario.rows[0];
             } else {

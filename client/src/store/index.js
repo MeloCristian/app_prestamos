@@ -10,7 +10,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         info_autocompletado: {},
-        all_info: {},
+        all_info: {
+            informacion: [],
+            prestamos: [],
+            registros: []
+        },
     },
     mutations: {
         setInfoAutocompletado( state, info_autocompletado ) {

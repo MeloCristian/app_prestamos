@@ -31,7 +31,7 @@
                 <template v-if="!infoVacia && !summary">
                     <AppCard />
                 </template>
-                <template v-if="infoVacia && allInfo.informacion">
+                <template v-if="infoVacia && allInfo.informacion && !summary">
                     <div class="alerta alerta-error text-center animate__animated animate__fadeInUp animate__faster">No se encontro información relacionada a su consulta</div>
                 </template>
 

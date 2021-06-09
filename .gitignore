@@ -1,2 +1,5 @@
 */node_modules
 /datos_csv
+# Ignorar soportes pdf y evidencias de foto
+server/src/soportes/*/*.pdf
+server/src/soportes/*/*.png

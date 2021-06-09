@@ -14,21 +14,40 @@ router.get('/is_logged', verifyToken, async (req, res) => {
     res.json({ logged: true });
 });
 
-router.get('/summary', async (req, res) => {
+router.get('/summary/:id_sede?', async (req, res) => {
 
-    const equipos = await equiposController.getTotalEquipos();
-    const prestamos = await equiposController.getTotalPrestamos();
-    const disponibles = await equiposController.getTotalDisponibles();
-    const revisiones = await equiposController.getTotalRevisiones();
-    const devoluciones = await equiposController.getTotalDevoluciones();
+    const { id_sede } = req.params;
+    
+    if( !id_sede ) {
+        const equipos = await equiposController.getTotalEquipos();
+        const prestamos = await equiposController.getTotalPrestamos();
+        const disponibles = await equiposController.getTotalDisponibles();
+        const revisiones = await equiposController.getTotalRevisiones();
+        const devoluciones = await equiposController.getTotalDevoluciones();
 
-    res.json({
-        equipos,
-        prestamos,
-        disponibles,
-        revisiones,
-        devoluciones
-    });
+        res.json({
+            equipos,
+            prestamos,
+            disponibles,
+            revisiones,
+            devoluciones
+        });
+    } else {
+        const equipos = await equiposController.getTotalEquiposBySede( id_sede );
+        const prestamos = await equiposController.getTotalPrestamosBySede( id_sede );
+        const disponibles = await equiposController.getTotalDisponiblesBySede( id_sede );
+        const revisiones = await equiposController.getTotalRevisiones();
+        const devoluciones = await equiposController.getTotalDevoluciones();
+
+        res.json({
+            equipos,
+            prestamos,
+            disponibles,
+            revisiones,
+            devoluciones
+        });
+    }
+
 });
 
 router.get('/info', async (req, res) => {

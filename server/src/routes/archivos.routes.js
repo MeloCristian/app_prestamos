@@ -51,4 +51,14 @@ router.get('/devoluciones/:pdf', (req,res) => {
     }
 });
 
+router.get('/evidencias/:img', (req,res) => {
+    const { img } = req.params;
+    const archivo = `${__dir}/soportes/evidencias/${img}`;
+    if(archivoExiste(archivo)) {
+        return res.sendFile(archivo);
+    } else {
+        res.status(400).json({ 'error': 'El archivo solicitado no existe' });
+    }
+});
+
 module.exports = router; 

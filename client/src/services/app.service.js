@@ -30,6 +30,9 @@ export const getComodatario = async ( dni ) => {
     return await fetch( `${API_URI}all/comodatario/${dni}`);
 }
 
-export const getSummary = async ( ) => {
-    return await fetch( `${API_URI}all/summary`);
+export const getSummary = async ( id_sede = false ) => {
+    if( !id_sede && id_sede == '' )
+        return await fetch( `${API_URI}all/summary`);
+    else
+        return await fetch( `${API_URI}all/summary/${id_sede}`);
 }

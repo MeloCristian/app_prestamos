@@ -9,7 +9,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <p class="text-center">Seleccione el comotado correspondiente al préstamo.</p>
+            <p class="text-center">Seleccione el comodato correspondiente al préstamo.</p>
             <p class="text-center">Recuerde ser cuidadoso al momento de cargar el comodato, y posteriormente revisar si fue cargado correctamente.</p>
             <form>
                 <div class="form-group">

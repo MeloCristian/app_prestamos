@@ -9,11 +9,9 @@
             </button>
         </div>
         <div class="modal-body">
-            <!-- <p class="text-center">Préstamo de equipos</p> -->
             <form>
                 <div class="form-group">
                     <label>QR:</label>
-                    <!-- <input type="text" v-if="datosModal.qr" :value="datosModal.qr" disabled class="form-control" placeholder="QR - Equipo"> -->
                     <input type="text" v-model="qr" class="form-control" placeholder="QR - Equipo">
                 </div>
                 <div class="form-group">
@@ -40,7 +38,28 @@
                 </div>
                 <div class="form-group">
                     <label>Comodato: <span id="error-archivo" class="text-danger"></span></label>
-                    <input type="file" id="archivo" @change="handleArchivo" class="form-control">
+                    <input type="file" id="archivo" @change="handleArchivo" class="form-control" accept="application/pdf">
+                </div>
+
+                <div class="form-group">
+                    <label>Foto: <span id="error-foto" class="text-danger"></span></label>
+                    <input type="file" id="foto" @change="handleFoto" :disabled="data_camara.camara" class="form-control" accept="image/png, image/jpeg">
+                </div>
+                <div class="text-center">
+                    <button v-if="!data_camara.camara" @click.prevent="toggleCamara" type="button" :disabled="data_camara.file_foto" class="btn btn-success">Activar camara</button>
+                    <button v-else type="button" @click.prevent="toggleCamara" class="btn btn-danger">Desactivar camara</button>
+                </div>
+
+                <div v-if="data_camara.camara" class="foto-evidencia animate__animated animate__fadeIn animate__fast">
+                    <div class="camera">
+                        <video id="video">Video no disponible</video>
+                        <button id="capturar" @click.prevent="takepicture" v-if="!data_img" class="btn btn-success">Tomar foto</button>
+                        <button v-else @click.prevent="clearphoto" class="btn btn-danger">Eliminar</button>
+                    </div>     
+                    <canvas id="canvas" style="display:none;"></canvas>
+                    <div class="output">
+                        <img id="photo" v-if="data_img" :src="data_img" class="animate__animated animate__fadeIn animate__fast" alt="Vista de la foto"> 
+                    </div>
                 </div>
             </form>
         </div>
@@ -48,7 +67,9 @@
             <button type="button" class="btn btn-success" @click="realizarPrestamo" :disabled="!formCompleto">Realizar préstamo</button>
             <button type="button" class="btn btn-danger" @click="cerrar">Cancelar</button>
         </div>
+
     </div>
+
 </template>
 
 <script>
@@ -67,7 +88,20 @@ export default {
             fecha_inicio: null,
             lugar_prestamo: '',
             message_dni: null,
-            success_dni: false 
+            success_dni: false,
+
+            data_camara : {
+                file_foto: false,
+                camara: false,
+                // para capturar foto
+                width: 400,
+                height: 0,
+                video: null,
+                canvas: null,
+                photo: null,
+                capturar: null,
+            },
+            data_img: null 
         }
     },
     computed: {
@@ -83,6 +117,73 @@ export default {
         }
     },
     methods: {
+        toggleCamara() {
+            this.data_camara.camara = !this.data_camara.camara;
+            if(this.data_camara.camara) {
+                setTimeout( () => {
+                    this.startCamara();
+                }, 100);
+            } else {
+                this.stopCamara();
+            }
+        },
+        startCamara() {
+            let streaming = false;
+
+            this.data_camara.video = document.getElementById('video');
+            this.data_camara.canvas = document.getElementById('canvas');
+            this.data_camara.photo = document.getElementById('photo');
+
+            navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                })
+                .then( stream => {
+                    this.data_camara.video.srcObject = stream;
+                    this.data_camara.video.play();
+                })
+                .catch( err => {
+                    this.$store.dispatch('showError', 'No se ha sido posible inicializar la cámara');
+                    console.log("Ocurrio un error: " + err);
+                });
+
+            this.data_camara.video.addEventListener('canplay', () => {
+                if (!streaming) {
+                    this.data_camara.height = this.data_camara.video.videoHeight / (this.data_camara.video.videoWidth / this.data_camara.width);
+
+                    if (isNaN(this.height)) {
+                        this.data_camara.height = this.data_camara.width / (4 / 3);
+                    }
+
+                    this.data_camara.video.setAttribute('width', this.data_camara.width);
+                    this.data_camara.video.setAttribute('height', this.data_camara.height);
+                    this.data_camara.canvas.setAttribute('width', this.data_camara.width);
+                    this.data_camara.canvas.setAttribute('height', this.data_camara.height);
+                    streaming = true;
+                }
+            }, false);
+        },
+        stopCamara() {
+            this.data_camara.video.srcObject.getTracks().forEach( (track) => {
+                track.stop();
+            });
+            this.clearphoto();
+        },
+        clearphoto() {
+            this.data_img = null;
+        },
+        takepicture() {
+            let context = this.data_camara.canvas.getContext('2d');
+            if (this.data_camara.width && this.data_camara.height) {
+                this.data_camara.canvas.width = this.data_camara.width;
+                this.data_camara.canvas.height = this.data_camara.height;
+                context.drawImage(this.data_camara.video, 0, 0, this.data_camara.width, this.data_camara.height);
+
+                this.data_img = this.data_camara.canvas.toDataURL('image/png');
+            } else {
+                this.clearphoto();
+            }
+        },
         async getInfoAutocompletado() {
             // Obtengo la informacion de sedes y funcionarios para poder hacer un auticompletado de los inputs
             this.$store.dispatch('showLoading');
@@ -151,10 +252,43 @@ export default {
                 }
             }
         },
+        handleFoto(e) {
+            const files = e.target.files || e.dataTransfer.files;
+
+            const spanError = document.querySelector('#error-foto');
+            spanError.textContent = '';
+
+            if (!files.length) {
+                this.data_camara.file_foto = false;
+                this.data_img = null;
+                return;
+            }
+
+            let extFoto = files[0].name.split('.').pop();
+            if(extFoto != 'png' && extFoto != 'jpg' && extFoto != 'jpeg') {
+                e.target.classList.add('danger');
+                spanError.textContent = 'Solo se permiten imágenes';
+                this.data_camara.file_foto = false;
+                this.data_img = null;
+                return;
+            } else {
+                e.target.classList.remove('danger');
+                this.data_camara.file_foto = true;
+
+                var fr = new FileReader();
+    
+                fr.addEventListener("load", (e) => {
+                    console.log(e.target.result);
+                    this.data_img = e.target.result;
+                }); 
+                
+                fr.readAsDataURL( files[0] );
+            }
+        },
         cerrar() {
             this.$store.dispatch('closeModal');
         }
-    },
+    }
 };
 </script>
 
@@ -167,5 +301,48 @@ export default {
 }
 .modal-prestamo .form-control:focus {
     border: 1px solid #51c54b;
+}
+</style>
+
+<style scoped>
+.foto-evidencia {
+    width: 100%;
+    /* padding: 10px; */
+    position: relative;
+}
+.foto-evidencia .camera,
+.foto-evidencia .output {
+    width: 100%;
+    display: flex;
+    position: relative;
+}
+.foto-evidencia .camera video,
+.foto-evidencia .output img {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+    height: auto;
+}
+.foto-evidencia .output img {
+    border: 2px solid #06446b;
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, .2);
+}
+.foto-evidencia .camera button {
+    position: absolute;
+    left: 42%;
+    bottom: 10px;
+    padding: 3px 5px;
+    opacity: 0.7;
+    z-index: 9;
+    transition: .3s ease all;
+}
+.foto-evidencia .camera button:hover {
+    opacity: 1;
+}
+.foto-evidencia .output {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 </style>

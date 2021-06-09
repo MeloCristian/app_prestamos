@@ -9,7 +9,7 @@ class PrestamosController {
                 SELECT 
                 E.qr, CE.cedula as cedula_estudiante, CE.nombre as estudiante, CE.codigo, C.nombre, 
                 F.cedula as cedula_funcionario, F.nombre as funcionario,
-                P.id_prestamo, P.comodato, P.fecha_inicio, P.fecha_fin, 
+                P.id_prestamo, P.comodato, P.fecha_inicio, P.fecha_fin, P.evidencia,
                 S.sede as lugar_prestamo
                 FROM equipos E INNER JOIN prestamos P ON E.qr = P.qr 
                 INNER JOIN comodatarios CE ON P.dni_comodatario = CE.cedula 
@@ -35,7 +35,7 @@ class PrestamosController {
                 SELECT 
                 E.qr, CE.cedula as cedula_estudiante, CE.nombre as estudiante, CE.codigo, C.nombre, 
                 F.cedula as cedula_funcionario, F.nombre as funcionario,
-                P.id_prestamo, P.comodato, P.fecha_inicio, P.fecha_fin, 
+                P.id_prestamo, P.comodato, P.fecha_inicio, P.fecha_fin, P.evidencia,
                 S.sede as lugar_prestamo
                 FROM equipos E INNER JOIN prestamos P ON E.qr = P.qr 
                 INNER JOIN comodatarios CE ON P.dni_comodatario = CE.cedula 
@@ -119,6 +119,28 @@ class PrestamosController {
         } catch( error ) {
             console.log(error);
             return {'error': "Error al actualizar el comodato"};
+        }
+    }
+
+    async setEvidenciaPrestamo({ id_prestamo, qr, dni_estudiante }) {
+        try {
+            // const { qr } = req.params;
+            const evidencia = `${qr}_${dni_estudiante}_${id_prestamo}.png`;
+
+            const result = await pool.query(`
+                UPDATE prestamos
+                SET evidencia = $1
+                WHERE id_prestamo = $2 AND qr = $3;
+            `, [ evidencia, id_prestamo, qr]);
+
+            if(result.rowCount > 0) {
+                return {'message': "Evidencia cargada y actualizada correctamente"};
+            } else {
+                return {'error': "Error al actualizar la evidencia"};
+            }
+        } catch( error ) {
+            console.log(error);
+            return {'error': "Error al actualizar la evidencia"};
         }
     }
 

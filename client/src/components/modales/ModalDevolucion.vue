@@ -16,7 +16,7 @@
             <p v-else class="text-center">Para iniciar la devolución, a continuación seleccione fecha de inicio y el archivo de soporte en PDF</p>
             <form>
                 <div class="form-group">
-                    <label v-if="!datosModal.fin_proceso">Fecha inicio:</label>
+                    <label v-if="!datosModal.fin_proceso">Fecha de inicio:</label>
                     <label v-else>Fecha finalización:</label>
                     <input type="date" v-model="fecha" class="form-control" />
                 </div>

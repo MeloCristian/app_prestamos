@@ -29,9 +29,29 @@ class EquiposController {
         }
     }
 
+    async getTotalEquiposBySede( id_sede ) {
+        try {
+            const equipos = await pool.query('SELECT count(*) AS equipos FROM equipos WHERE sede_responsable = $1', [ id_sede ]);
+            return equipos.rows[0]['equipos'];
+        } catch( error ) {
+            console.log(error);
+            return { error: "Error al obtener el total de equipos"};
+        }
+    }
+
     async getTotalPrestamos() {
         try {
             const prestamos = await pool.query('SELECT count(*) AS prestamos FROM prestamos');
+            return prestamos.rows[0]['prestamos'];
+        } catch( error ) {
+            console.log(error);
+            return { error: "Error al obtener el numero de préstamos realizados"};
+        }
+    }
+
+    async getTotalPrestamosBySede(id_sede) {
+        try {
+            const prestamos = await pool.query('SELECT count(*) AS prestamos FROM prestamos WHERE lugar_prestamo = $1', [ id_sede ]);
             return prestamos.rows[0]['prestamos'];
         } catch( error ) {
             console.log(error);
@@ -49,7 +69,27 @@ class EquiposController {
         }
     }
 
+    async getTotalDisponiblesBySede(id_sede) {
+        try {
+            const disponibles = await pool.query('SELECT count(qr) AS disponibles FROM equipos WHERE sede_responsable = $1 AND NOT qr IN (SELECT QR from prestamos WHERE fecha_fin IS NULL)', [ id_sede ]);
+            return disponibles.rows[0]['disponibles'];
+        } catch( error ) {
+            console.log(error);
+            return { error: "Error al obtener el total de equipos disponibles"};
+        }
+    }
+
     async getTotalRevisiones() {
+        try {
+            const revisiones = await pool.query('SELECT count(*) AS revisiones FROM registros WHERE id_proceso = 1');
+            return revisiones.rows[0]['revisiones'];
+        } catch( error ) {
+            console.log(error);
+            return { error: "Error al obtener el total de revisiones realizadas"};
+        }
+    }
+
+    async getTotalRevisionesBySede( id_sede ) {
         try {
             const revisiones = await pool.query('SELECT count(*) AS revisiones FROM registros WHERE id_proceso = 1');
             return revisiones.rows[0]['revisiones'];
