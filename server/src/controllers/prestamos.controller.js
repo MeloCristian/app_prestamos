@@ -112,13 +112,13 @@ class PrestamosController {
             `, [ comodato, id_prestamo, qr]);
 
             if(result.rowCount > 0) {
-                return {'message': "Comodato cargado y actualizado correctamente"};
+                return { message: 'Comodato cargado y actualizado correctamente'};
             } else {
-                return {'error': "Error al actualizar el comodato"};
+                return { error: 'Error al actualizar el comodato'};
             }
         } catch( error ) {
             console.log(error);
-            return {'error': "Error al actualizar el comodato"};
+            return { error: 'Error al actualizar el comodato' };
         }
     }
 
@@ -134,13 +134,13 @@ class PrestamosController {
             `, [ evidencia, id_prestamo, qr]);
 
             if(result.rowCount > 0) {
-                return {'message': "Evidencia cargada y actualizada correctamente"};
+                return { message: 'Evidencia cargada y actualizada correctamente' };
             } else {
-                return {'error': "Error al actualizar la evidencia"};
+                return { error: 'Error al actualizar la evidencia' };
             }
         } catch( error ) {
             console.log(error);
-            return {'error': "Error al actualizar la evidencia"};
+            return { error : 'Error al actualizar la evidencia' };
         }
     }
 

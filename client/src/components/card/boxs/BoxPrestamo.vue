@@ -54,6 +54,11 @@
                     </div>
                     <div class="opts-box">
                         <button class="btn btn-primary hint--top" aria-label="Cargar comodato"
+                                @click="modalEvidencia(prestamo)">
+                            <img src="@/assets/img/foto.svg" width="30" height="30"/>
+                            <span>Evidencia</span>
+                        </button>
+                        <button class="btn btn-primary hint--top" aria-label="Cargar comodato"
                                 @click="modalComodato(prestamo)">
                             <img src="@/assets/img/pdf.svg" width="30" height="30"/>
                             <span>Comodato</span>
@@ -89,6 +94,16 @@ export default {
         }
     },
     methods: {
+        modalEvidencia(prestamo) {
+            this.$store.dispatch('showModal', { 
+                show_modal: 'ModalEvidencia', 
+                datos_modal: {
+                    id_prestamo: prestamo.id_prestamo,
+                    qr: prestamo.qr,
+                    dni_estudiante: prestamo.cedula_estudiante
+                }
+            });
+        },
         modalComodato(prestamo) {
             this.$store.dispatch('showModal', { 
                 show_modal: 'ModalComodato', 
@@ -140,9 +155,10 @@ export default {
     width: 35px;
 }
 .row.foto .foto_evidencia {
+    display: block;
     width: 250px;
-    /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .3); */
     border: 1px solid #858585;
-    border-radius: 10px;
+    border-radius: 5px;
+    margin: 0 auto;
 }
 </style>

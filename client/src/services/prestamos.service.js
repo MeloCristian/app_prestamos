@@ -15,3 +15,11 @@ export const uploadComodato = async ( data ) => {
         headers: setHeaders()
     });
 }
+
+export const uploadEvidencia = async ( data ) => {
+    return await fetch( `${API_URI}prestamos/evidencia`, {
+        method: 'put',
+        body: data,
+        headers: setHeaders( true )
+    });
+}

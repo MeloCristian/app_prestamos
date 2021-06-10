@@ -33,6 +33,10 @@ export default new Vuex.Store({
             const idxPrestamo = state.all_info.prestamos.findIndex(p => p.id_prestamo == id_prestamo);
             state.all_info.prestamos[idxPrestamo].comodato = comodato;
         },
+        updateEvidenciaPrestamo( state, { id_prestamo, evidencia } ) {
+            const idxPrestamo = state.all_info.prestamos.findIndex(p => p.id_prestamo == id_prestamo);
+            state.all_info.prestamos[idxPrestamo].evidencia = `${evidencia}?${Date.now()}`; //Para frozar la descarga de la nueva imágen. y evitar la caché
+        },
         finalizarRegistro( state, { id_registro, fecha } ) {
             const idxRegistro = state.all_info.registros.findIndex(r => r.id_registro == id_registro);
             state.all_info.registros[idxRegistro].fecha_fin = fecha;
@@ -57,6 +61,9 @@ export default new Vuex.Store({
         },
         updateComodatoPrestamo( { commit }, { id_prestamo, comodato } ) {
             commit('updateComodatoPrestamo', { id_prestamo, comodato });
+        },
+        updateEvidenciaPrestamo( { commit }, { id_prestamo, evidencia } ) {
+            commit('updateEvidenciaPrestamo', { id_prestamo, evidencia });
         },
         finalizarRegistro({ commit }, { id_registro, fecha } ) {
             commit('finalizarRegistro', { id_registro, fecha });

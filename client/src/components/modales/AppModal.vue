@@ -24,9 +24,10 @@ export default {
     },
     components: {
         ModalPrestamo: () => import(/* webpackChunkName: "modalPrestamo" */ "./ModalPrestamo"),
-        ModalGarantia: () => import(/* webpackChunkName: "modalPrestamo" */ "./ModalGarantia"),
-        ModalDevolucion: () => import(/* webpackChunkName: "modalPrestamo" */ "./ModalDevolucion"),
-        ModalComodato: () => import(/* webpackChunkName: "modalPrestamo" */ "./ModalComodato"),
+        ModalGarantia: () => import(/* webpackChunkName: "modalGarantia" */ "./ModalGarantia"),
+        ModalDevolucion: () => import(/* webpackChunkName: "modalDevolucion" */ "./ModalDevolucion"),
+        ModalComodato: () => import(/* webpackChunkName: "modalComodato" */ "./ModalComodato"),
+        ModalEvidencia: () => import(/* webpackChunkName: "modalEvidencia" */ "./ModalEvidencia"),
     }
 };
 </script>

@@ -48,10 +48,10 @@ export default {
 
             const file = document.querySelector('input[type="file"]').files[0];
 
-            if(!file) {
-                this.$store.dispatch('showError', 'No ha seleccionado ningún archivo');
-                return false;
-            }
+            // if(!file) {
+            //     this.$store.dispatch('showError', 'No ha seleccionado ningún archivo');
+            //     return false;
+            // }
 
             const formData = new FormData();
 
