@@ -14,7 +14,7 @@
             <form>
                 <div class="form-group">
                     <label>Comodato: <span id="error-archivo" class="text-danger"></span></label>
-                    <input type="file" @change="handleArchivo" class="form-control">
+                    <input type="file" @change="handleArchivo" class="form-control" accept="application/pdf">
                 </div>
             </form>
         </div>
